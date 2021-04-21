@@ -10,8 +10,8 @@ namespace ConwaysGameOfLife
         const int Dead = 0;             // Using a grid of 0's and 1's will help us count
         const int Alive = 1;            //   count neighbors efficiently in the Life program.
 
-        static int GridSizeX = 20;
-        static int GridSizeY = 10;
+        static int GridSizeX = 25;
+        static int GridSizeY = 25;
 
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -42,6 +42,14 @@ namespace ConwaysGameOfLife
                     logger.Debug($"{key} pressed...");
                     if (key == ConsoleKey.Q)
                         done = true;
+                    else if (key == ConsoleKey.F)
+                    {
+
+                    }
+                    else if (key == ConsoleKey.R)
+                    {
+
+                    }
                 }
 
                 gridCount++;            // Increment at bottom of loop so that first grid displayed is Grid #0
