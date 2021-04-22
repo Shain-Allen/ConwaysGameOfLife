@@ -15,12 +15,61 @@ namespace ConwaysGameOfLife
 
         static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
+        static string mode;
+
+        static string pattern;
+
+        static int maxGenerations = 50;
+
+        static int fillPercent;
+
         static void Main(string[] args)
         {
             logger.Info("=== Starting Program ===");
+            logger.Info("Parsing arguments...");
 
             int gridCount = 0;
             int[,] grid = new int[GridSizeX, GridSizeY];
+
+            if (args.Length == 0)
+            {
+                mode = "i";
+                pattern = "R";
+            }
+            else if (args.Length == 1)
+            {
+                if (args[0] == "interactive" || args[0] == "i")
+                {
+                    mode = "i";
+                }
+                else if (args[0] == "silent" || args[0] == "s")
+                {
+                    mode = "s";
+                }
+
+                pattern = "R";
+            }
+            else if (args.Length == 2)
+            {
+                if (args[0] == "interactive" || args[0] == "i")
+                {
+                    mode = "i";
+                }
+                else if (args[0] == "silent" || args[0] == "s")
+                {
+                    mode = "s";
+                }
+
+                if (int.TryParse(args[1], out fillPercent))
+                {
+                    if (fillPercent >= 0 && fillPercent <= 100)
+                    {
+                        FillGridRandomly(grid, fillPercent);
+                    }
+                }
+            }
+
+            logger.Info("... argument Parsing complete");
 
             bool done = false;
             while (!done)
