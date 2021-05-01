@@ -140,11 +140,11 @@ namespace ConwaysGameOfLife
                             done = true;
                         else if (key == ConsoleKey.F)
                         {
-
+                            grid = new int[GridSizeX, GridSizeY];
                         }
                         else if (key == ConsoleKey.R)
                         {
-
+                            grid = new int[GridSizeX, GridSizeY];
                         }
                     }
                 }
