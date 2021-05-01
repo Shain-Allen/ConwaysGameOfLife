@@ -114,7 +114,7 @@ namespace ConwaysGameOfLife
             if (pattern == "R")
             {
                 logger.Info($"--- Filling grid with R-Pentamino pattern");
-
+                GenerateRPentomino(grid);
             }
             else
             {
@@ -123,16 +123,17 @@ namespace ConwaysGameOfLife
             bool done = false;
             while (!done)
             {
-                logger.Info($"Generation: {gridCount}  aliveCount: {CountLiveCells(grid)}");
+                logger.Info($"Generation: {gridCount}  aliveCount: {CountLiveCells(grid, GridSizeX, GridSizeY)}");
                 if (mode == "interactive")
                 {
+                    PrintGrid(grid);
+                    Thread.Sleep(500);
+
+                    CheckNeighbors(grid, nextGrid);
+                    grid = nextGrid;
+
                     if (Console.KeyAvailable)
                     {
-
-
-
-                        Thread.Sleep(500);
-
                         ConsoleKey key = Console.ReadKey(true).Key;
                         logger.Debug($"{key} pressed...");
                         if (key == ConsoleKey.Q)
@@ -226,24 +227,26 @@ namespace ConwaysGameOfLife
             return new string('-', number);
         }
 
-        static int CountLiveCells(int[,] grid)
+        static int CountLiveCells(int[,] grid, int _GridSizeX, int _GridSizeY)
         {
             int count = 0;
-            for (int x = 0; x < GridSizeX; x++)
-                for (int y = 0; y < GridSizeY; y++)
+            for (int x = 0; x < _GridSizeX; x++)
+                for (int y = 0; y < _GridSizeY; y++)
                     if (grid[x, y] == Alive)
                         count++;
             return count;
         }
 
-        static void checkNeighbors(int[,] currentGrid, int[,] nextGrid)
+        static void CheckNeighbors(int[,] currentGrid, int[,] nextGrid)
         {
+            int livingNeighbors = 0;
+
             for (int x = 0; x < GridSizeX; x++)
             {
                 for (int y = 0; y < GridSizeY; y++)
                 {
                     int[,] neighbors = new int[3, 3];
-
+                    //put the neighboring cells into a smaller grid for easier checking
                     if (x - 1 > 0)
                     {
                         if (y - 1 > 0)
@@ -257,6 +260,12 @@ namespace ConwaysGameOfLife
                         }
 
                         neighbors[0, 1] = currentGrid[x - 1, y];
+                    }
+                    else if (x - 1 < 0)
+                    {
+                        neighbors[0, 0] = Dead;
+                        neighbors[0, 1] = Dead;
+                        neighbors[0, 2] = Dead;
                     }
 
                     if (x + 1 < GridSizeX)
@@ -273,20 +282,74 @@ namespace ConwaysGameOfLife
 
                         neighbors[2, 1] = currentGrid[x + 1, y];
                     }
+                    else if (x + 1 > GridSizeX)
+                    {
+                        neighbors[2, 0] = Dead;
+                        neighbors[2, 1] = Dead;
+                        neighbors[2, 2] = Dead;
+                    }
 
                     if (y - 1 > 0)
                     {
                         neighbors[1, 0] = currentGrid[x, y - 1];
+                    }
+                    else if (y - 1 < 0)
+                    {
+                        neighbors[1, 0] = Dead;
                     }
 
                     if (y + 1 < GridSizeY)
                     {
                         neighbors[1, 2] = currentGrid[x, y + 1];
                     }
+                    else if (y + 1 > GridSizeY)
+                    {
+                        neighbors[1, 2] = Dead;
+                    }
 
                     neighbors[1, 1] = currentGrid[x, y];
+
+                    livingNeighbors = CountLiveCells(neighbors, 3, 3);
+
+                    if (currentGrid[x, y] == Alive)
+                    {
+                        livingNeighbors--;
+                        if (livingNeighbors == 2 || livingNeighbors == 3)
+                        {
+                            nextGrid[x, y] = Alive;
+                        }
+                        else
+                        {
+                            nextGrid[x, y] = Dead;
+                        }
+                    }
+                    else if (currentGrid[x, y] == Dead && livingNeighbors == 3)
+                    {
+                        nextGrid[x, y] = Alive;
+                    }
                 }
             }
+        }
+
+        static void GenerateRPentomino(int[,] grid)
+        {
+            int centerX = GridSizeX / 2;
+            int centerY = GridSizeY / 2;
+
+            if (GridSizeX % 2 == 1)
+            {
+                centerX++;
+            }
+            if (GridSizeY % 2 == 1)
+            {
+                centerY++;
+            }
+
+            grid[centerX, centerY - 1] = Alive;
+            grid[centerX + 1, centerY - 1] = Alive;
+            grid[centerX - 1, centerY] = Alive;
+            grid[centerX, centerY] = Alive;
+            grid[centerX, centerY + 1] = Alive;
         }
     }
 }
