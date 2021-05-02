@@ -250,9 +250,9 @@ namespace ConwaysGameOfLife
                 {
                     int[,] neighbors = new int[3, 3];
                     //put the neighboring cells into a smaller grid for easier checking
-                    if (x - 1 > 0)
+                    if (x - 1 >= 0)
                     {
-                        if (y - 1 > 0)
+                        if (y - 1 >= 0)
                         {
                             neighbors[0, 0] = currentGrid[x - 1, y - 1];
                         }
@@ -273,7 +273,7 @@ namespace ConwaysGameOfLife
 
                     if (x + 1 < GridSizeX)
                     {
-                        if (y - 1 > 0)
+                        if (y - 1 >= 0)
                         {
                             neighbors[2, 0] = currentGrid[x + 1, y - 1];
                         }
@@ -285,18 +285,18 @@ namespace ConwaysGameOfLife
 
                         neighbors[2, 1] = currentGrid[x + 1, y];
                     }
-                    else if (x + 1 > GridSizeX)
+                    else if (x + 1 >= GridSizeX)
                     {
                         neighbors[2, 0] = Dead;
                         neighbors[2, 1] = Dead;
                         neighbors[2, 2] = Dead;
                     }
 
-                    if (y - 1 > 0)
+                    if (y - 1 >= 0)
                     {
                         neighbors[1, 0] = currentGrid[x, y - 1];
                     }
-                    else if (y - 1 < 0)
+                    else if (y - 1 <= 0)
                     {
                         neighbors[1, 0] = Dead;
                     }
@@ -305,7 +305,7 @@ namespace ConwaysGameOfLife
                     {
                         neighbors[1, 2] = currentGrid[x, y + 1];
                     }
-                    else if (y + 1 > GridSizeY)
+                    else if (y + 1 >= GridSizeY)
                     {
                         neighbors[1, 2] = Dead;
                     }
