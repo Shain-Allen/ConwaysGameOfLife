@@ -21,7 +21,7 @@ namespace ConwaysGameOfLife
 
         static int maxGenerations = 50;
 
-        static int fillPercent;
+        static int fillPercent = 20;
 
         static void Main(string[] args)
         {
@@ -31,6 +31,9 @@ namespace ConwaysGameOfLife
             int gridCount = 0;
             int[,] grid = new int[GridSizeX, GridSizeY];
             int[,] nextGrid = new int[GridSizeX, GridSizeY];
+
+            EmptyGrid(grid);
+            EmptyGrid(nextGrid);
 
             if (args.Length == 0)
             {
@@ -131,7 +134,6 @@ namespace ConwaysGameOfLife
 
                     CheckNeighbors(grid, nextGrid);
                     grid = nextGrid;
-
                     if (Console.KeyAvailable)
                     {
                         ConsoleKey key = Console.ReadKey(true).Key;
@@ -140,11 +142,13 @@ namespace ConwaysGameOfLife
                             done = true;
                         else if (key == ConsoleKey.F)
                         {
-                            grid = new int[GridSizeX, GridSizeY];
+                            EmptyGrid(grid);
+                            FillGridRandomly(grid, fillPercent);
                         }
                         else if (key == ConsoleKey.R)
                         {
-                            grid = new int[GridSizeX, GridSizeY];
+                            EmptyGrid(grid);
+                            GenerateRPentomino(grid);
                         }
                     }
                 }
@@ -240,7 +244,6 @@ namespace ConwaysGameOfLife
         static void CheckNeighbors(int[,] currentGrid, int[,] nextGrid)
         {
             int livingNeighbors = 0;
-
             for (int x = 0; x < GridSizeX; x++)
             {
                 for (int y = 0; y < GridSizeY; y++)
@@ -350,6 +353,17 @@ namespace ConwaysGameOfLife
             grid[centerX - 1, centerY] = Alive;
             grid[centerX, centerY] = Alive;
             grid[centerX, centerY + 1] = Alive;
+        }
+
+        static void EmptyGrid(int[,] grid)
+        {
+            for (int x = 0; x < GridSizeX; x++)
+            {
+                for (int y = 0; y < GridSizeY; y++)
+                {
+                    grid[x, y] = Dead;
+                }
+            }
         }
     }
 }
