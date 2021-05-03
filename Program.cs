@@ -310,13 +310,12 @@ namespace ConwaysGameOfLife
                         neighbors[1, 2] = Dead;
                     }
 
-                    neighbors[1, 1] = currentGrid[x, y];
+                    neighbors[1, 1] = Dead;
 
                     livingNeighbors = CountLiveCells(neighbors, 3, 3);
 
                     if (currentGrid[x, y] == Alive)
                     {
-                        livingNeighbors--;
                         if (livingNeighbors == 2 || livingNeighbors == 3)
                         {
                             nextGrid[x, y] = Alive;
