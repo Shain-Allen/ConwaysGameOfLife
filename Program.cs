@@ -30,10 +30,10 @@ namespace ConwaysGameOfLife
 
             int gridCount = 0;
             int[,] grid = new int[GridSizeX, GridSizeY];
-            int[,] nextGrid = new int[GridSizeX, GridSizeY];
+            //int[,] nextGrid = new int[GridSizeX, GridSizeY];
 
             EmptyGrid(grid);
-            EmptyGrid(nextGrid);
+            //EmptyGrid(nextGrid);
 
             if (args.Length == 0)
             {
@@ -132,8 +132,9 @@ namespace ConwaysGameOfLife
                     PrintGrid(grid);
                     Thread.Sleep(500);
 
-                    CheckNeighbors(grid, nextGrid);
-                    grid = nextGrid;
+                    grid = CheckNeighbors(grid);
+                    //grid = nextGrid;
+                    //EmptyGrid(nextGrid);
                     if (Console.KeyAvailable)
                     {
                         ConsoleKey key = Console.ReadKey(true).Key;
@@ -241,9 +242,10 @@ namespace ConwaysGameOfLife
             return count;
         }
 
-        static void CheckNeighbors(int[,] currentGrid, int[,] nextGrid)
+        static int[,] CheckNeighbors(int[,] currentGrid)
         {
             int livingNeighbors = 0;
+            int[,] nextGrid = new int[GridSizeX, GridSizeY];
             for (int x = 0; x < GridSizeX; x++)
             {
                 for (int y = 0; y < GridSizeY; y++)
@@ -331,6 +333,7 @@ namespace ConwaysGameOfLife
                     }
                 }
             }
+            return nextGrid;
         }
 
         static void GenerateRPentomino(int[,] grid)
