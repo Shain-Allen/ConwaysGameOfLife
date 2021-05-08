@@ -92,7 +92,7 @@ namespace ConwaysGameOfLife
                     mode = "silent";
                 }
 
-                if (args[1] == "R")
+                if (args[1] == "R" || args[1] == "r")
                 {
                     pattern = "R";
                 }
@@ -151,6 +151,11 @@ namespace ConwaysGameOfLife
                             EmptyGrid(grid);
                             GenerateRPentomino(grid);
                         }
+                    }
+
+                    if (gridCount != -1 && gridCount == maxGenerations)
+                    {
+                        done = true;
                     }
                 }
                 else if (mode == "silent")
