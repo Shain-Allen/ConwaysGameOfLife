@@ -107,6 +107,18 @@ namespace ConwaysGameOfLife
                 int.TryParse(args[2], out maxGenerations);
             }
 
+            if (maxGenerations < 0 && maxGenerations != -1)
+            {
+                logger.Error("Error: you can't have negative Generations");
+                return;
+            }
+
+            if (mode == "silent" && maxGenerations == -1)
+            {
+                logger.Error("Error: Silent mode cannot run forever.  Please specify a positive number for the final generation.");
+                return;
+            }
+
             logger.Info("... argument Parsing complete");
             logger.Info($"{mode} mode");
             if (pattern == "R")
@@ -160,36 +172,23 @@ namespace ConwaysGameOfLife
                 }
                 else if (mode == "silent")
                 {
+                    grid = CheckNeighbors(grid);
 
+                    if (gridCount == maxGenerations)
+                    {
+                        Console.WriteLine("ConwaysGameOfLife");
+                        Console.WriteLine("======================================");
+                        Console.WriteLine($" {mode} mode");
+                        if (pattern == "R")
+                        {
+                            Console.Write($" Starting with: R-Pentamino");
+                        }
+                        Console.WriteLine($"\n Running for {maxGenerations} generations");
+                        Console.WriteLine($"Generation: {maxGenerations}");
+                        PrintGrid(grid);
+                        done = true;
+                    }
                 }
-
-                // Randomly Fill the Grid
-                // FillGridRandomly(grid, 20);
-
-                // Display the grid (and log its statistics)
-                // WriteLine($"Grid #{gridCount}");
-                // PrintGrid(grid);
-                // logger.Debug($"Grid #{gridCount}  aliveCount: {CountLiveCells(grid)}");
-
-                // Thread.Sleep(500);
-
-                // Check to see if the user pressed a key
-                // if (Console.KeyAvailable)
-                // {
-                //     ConsoleKey key = Console.ReadKey(true).Key;
-                //     logger.Debug($"{key} pressed...");
-                //     if (key == ConsoleKey.Q)
-                //         done = true;
-                //     else if (key == ConsoleKey.F)
-                //     {
-
-                //     }
-                //     else if (key == ConsoleKey.R)
-                //     {
-
-                //     }
-                // }
-
                 gridCount++;            // Increment at bottom of loop so that first grid displayed is Grid #0
             }
             logger.Info("=== Ending Program ===");
